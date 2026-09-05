@@ -1,0 +1,75 @@
+/* ==========================================================================
+   Dashboard Module Specific Styles
+   Frontend Foundation - Member 1
+   ========================================================================== */
+
+.dashboard-workflow-pipeline {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: var(--space-md);
+  position: relative;
+}
+
+.dashboard-workflow-step {
+  background-color: var(--warm-white);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  position: relative;
+  transition: all var(--transition-fast);
+}
+
+.dashboard-workflow-step:hover {
+  border-color: var(--brown);
+  background-color: #FFFFFF;
+}
+
+.dashboard-workflow-step__num {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--terracotta);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.dashboard-workflow-step__title {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--dark-brown);
+}
+
+.dashboard-workflow-step__status {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.dashboard-workflow-step__count {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--olive);
+}
+
+.dashboard-master-item {
+  background-color: var(--warm-white);
+  padding: var(--space-md);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.dashboard-master-item__val {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--dark-brown);
+}
+
+.dashboard-master-item__lbl {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
