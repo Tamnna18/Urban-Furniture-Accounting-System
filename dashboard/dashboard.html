@@ -1,0 +1,192 @@
+<!-- Dashboard Module Template -->
+<div class="dashboard-module">
+
+  <!-- Section Header -->
+  <div class="app-section-header">
+    <div class="app-section-header__title-group">
+      <h1 class="app-h1">Executive Accounting Dashboard</h1>
+      <p class="app-card__subtitle">Real-time overview of financial performance, liquidity, and operational metrics.</p>
+    </div>
+    <div class="app-section-header__actions">
+      <button class="app-btn app-btn--secondary" id="dashboard-refresh-btn">
+        <span>🔄</span> Refresh Data
+      </button>
+      <button class="app-btn app-btn--primary" id="dashboard-quick-invoice-btn">
+        <span>➕</span> New Invoice
+      </button>
+    </div>
+  </div>
+
+  <!-- 7 Core Accounting Metrics Grid -->
+  <div class="app-stat-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-lg); margin-bottom: var(--space-xl);">
+    
+    <!-- Sales KPI -->
+    <div class="app-stat-card" id="kpi-sales">
+      <div class="app-stat-card__top">
+        <span class="app-stat-card__label">Total Sales</span>
+        <div class="app-stat-card__icon app-stat-card__icon--terracotta">📈</div>
+      </div>
+      <div class="app-stat-card__value app-num" id="val-total-sales">$0.00</div>
+      <div class="app-flex app-items-center app-gap-xs">
+        <span class="app-stat-card__trend app-stat-card__trend--up" id="trend-sales">+0.0%</span>
+        <span class="app-stat-card__subtext" id="sub-sales">vs last period</span>
+      </div>
+    </div>
+
+    <!-- Purchases KPI -->
+    <div class="app-stat-card" id="kpi-purchases">
+      <div class="app-stat-card__top">
+        <span class="app-stat-card__label">Total Purchases</span>
+        <div class="app-stat-card__icon app-stat-card__icon--dark">🛒</div>
+      </div>
+      <div class="app-stat-card__value app-num" id="val-total-purchases">$0.00</div>
+      <div class="app-flex app-items-center app-gap-xs">
+        <span class="app-stat-card__trend app-stat-card__trend--neutral" id="trend-purchases">0.0%</span>
+        <span class="app-stat-card__subtext" id="sub-purchases">vs last period</span>
+      </div>
+    </div>
+
+    <!-- Cash Balance KPI -->
+    <div class="app-stat-card" id="kpi-cash">
+      <div class="app-stat-card__top">
+        <span class="app-stat-card__label">Cash Balance</span>
+        <div class="app-stat-card__icon app-stat-card__icon--olive">💵</div>
+      </div>
+      <div class="app-stat-card__value app-num" id="val-cash-balance">$0.00</div>
+      <div class="app-flex app-items-center app-gap-xs">
+        <span class="app-stat-card__trend app-stat-card__trend--up" id="trend-cash">Healthy</span>
+        <span class="app-stat-card__subtext" id="sub-cash">Liquidity Ratio</span>
+      </div>
+    </div>
+
+    <!-- Bank Balance KPI -->
+    <div class="app-stat-card" id="kpi-bank">
+      <div class="app-stat-card__top">
+        <span class="app-stat-card__label">Bank Balance</span>
+        <div class="app-stat-card__icon app-stat-card__icon--olive">🏛️</div>
+      </div>
+      <div class="app-stat-card__value app-num" id="val-bank-balance">$0.00</div>
+      <div class="app-flex app-items-center app-gap-xs">
+        <span class="app-stat-card__trend app-stat-card__trend--up" id="trend-bank">Reconciled</span>
+        <span class="app-stat-card__subtext" id="sub-bank">Active Accounts</span>
+      </div>
+    </div>
+
+    <!-- Receivables KPI -->
+    <div class="app-stat-card" id="kpi-receivables">
+      <div class="app-stat-card__top">
+        <span class="app-stat-card__label">Receivables</span>
+        <div class="app-stat-card__icon app-stat-card__icon--brown">📥</div>
+      </div>
+      <div class="app-stat-card__value app-num" id="val-receivables">$0.00</div>
+      <div class="app-flex app-items-center app-gap-xs">
+        <span class="app-stat-card__trend app-stat-card__trend--down" id="trend-receivables">Pending</span>
+        <span class="app-stat-card__subtext" id="sub-receivables">Outstanding</span>
+      </div>
+    </div>
+
+    <!-- Payables KPI -->
+    <div class="app-stat-card" id="kpi-payables">
+      <div class="app-stat-card__top">
+        <span class="app-stat-card__label">Payables</span>
+        <div class="app-stat-card__icon app-stat-card__icon--terracotta">📤</div>
+      </div>
+      <div class="app-stat-card__value app-num" id="val-payables">$0.00</div>
+      <div class="app-flex app-items-center app-gap-xs">
+        <span class="app-stat-card__trend app-stat-card__trend--neutral" id="trend-payables">Due</span>
+        <span class="app-stat-card__subtext" id="sub-payables">Bills Pending</span>
+      </div>
+    </div>
+
+    <!-- Net Profit KPI -->
+    <div class="app-stat-card" id="kpi-net-profit" style="grid-column: span 1 / -1; background: linear-gradient(135deg, #FFFFFF, var(--warm-white)); border-left: 4px solid var(--olive);">
+      <div class="app-stat-card__top">
+        <span class="app-stat-card__label" style="color: var(--olive);">Net Profit (YTD)</span>
+        <div class="app-stat-card__icon app-stat-card__icon--olive">✨</div>
+      </div>
+      <div class="app-stat-card__value app-num app-text-success" id="val-net-profit" style="font-size: 2.2rem;">$0.00</div>
+      <div class="app-flex app-items-center app-gap-xs">
+        <span class="app-stat-card__trend app-stat-card__trend--up" id="trend-net-profit">+0.0%</span>
+        <span class="app-stat-card__subtext" id="sub-net-profit">Net Margin Ratio</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Accounting Workflow Overview Pipeline -->
+  <div class="app-card" style="margin-bottom: var(--space-xl);">
+    <div class="app-card__header">
+      <div>
+        <h3 class="app-card__title">Accounting Workflow Overview</h3>
+        <p class="app-card__subtitle">End-to-end accounting pipeline status and system health</p>
+      </div>
+      <span class="app-badge app-badge--success"><span class="app-badge__dot"></span> Operational</span>
+    </div>
+    <div class="app-card__body">
+      <div class="dashboard-workflow-pipeline" id="dashboard-workflow-container">
+        <!-- Dynamic Workflow Steps -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Dashboard Grid (Recent Transactions & Quick Actions) -->
+  <div class="app-dashboard-grid" style="display: grid; grid-template-columns: 2fr 1fr; gap: var(--space-xl); margin-bottom: var(--space-xl);">
+    
+    <!-- Recent Transactions Card -->
+    <div class="app-card">
+      <div class="app-card__header">
+        <div>
+          <h3 class="app-card__title">Recent Transactions</h3>
+          <p class="app-card__subtitle">Latest journal postings, sales invoices, and vendor bills</p>
+        </div>
+        <button class="app-btn app-btn--secondary app-btn--sm" onclick="App.Navigation.navigateTo('journal-entries')">
+          View All
+        </button>
+      </div>
+      <div class="app-table-container" style="border: none; border-radius: 0; box-shadow: none;">
+        <table class="app-table app-table--hover app-table--striped">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Description</th>
+              <th>Module</th>
+              <th>Reference</th>
+              <th class="app-text-right">Amount</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="dashboard-transactions-body">
+            <!-- Dynamic Transaction Rows -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Right Side Panel: Quick Actions & Master Data -->
+    <div style="display: flex; flex-direction: column; gap: var(--space-xl);">
+      
+      <!-- Quick Actions Card -->
+      <div class="app-card">
+        <div class="app-card__header">
+          <h3 class="app-card__title">Quick Actions</h3>
+        </div>
+        <div class="app-card__body" id="dashboard-quick-actions" style="display: flex; flex-direction: column; gap: var(--space-sm);">
+          <!-- Dynamic Action Buttons -->
+        </div>
+      </div>
+
+      <!-- Master Data Summary Card -->
+      <div class="app-card">
+        <div class="app-card__header">
+          <h3 class="app-card__title">Master Data Summary</h3>
+        </div>
+        <div class="app-card__body" style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-md);" id="dashboard-master-summary">
+          <!-- Dynamic Master Data Items -->
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
