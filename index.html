@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Globetrotter Enterprise Accounting & Business Suite Application Shell">
+  <title>Globetrotter Accounting Suite</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
+
+  <!-- Core Design Tokens & Stylesheets -->
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/responsive.css">
+  <link rel="stylesheet" href="modules/dashboard/dashboard.css">
+</head>
+<body>
+
+  <!-- Main Application Layout Shell -->
+  <div class="app-layout">
+
+    <!-- Mobile Drawer Overlay -->
+    <div class="app-sidebar-overlay" id="sidebar-mobile-overlay"></div>
+
+    <!-- Sidebar Navigation -->
+    <aside class="app-sidebar" id="app-sidebar">
+      
+      <!-- Sidebar Header & Brand Logo -->
+      <div class="app-sidebar__header">
+        <div class="app-sidebar__brand">
+          <div class="app-sidebar__brand-icon">G</div>
+          <span class="app-sidebar__brand-text">Globetrotter</span>
+        </div>
+        <button class="app-sidebar__toggle" id="sidebar-toggle-btn" aria-label="Toggle Sidebar">
+          ◀
+        </button>
+      </div>
+
+      <!-- Navigation Links Container (All 12 Modules Supported) -->
+      <nav class="app-sidebar__nav">
+        
+        <!-- Overview Group -->
+        <div class="app-sidebar__group-title">Main</div>
+        <a class="app-sidebar__item active" data-route="dashboard">
+          <span class="app-sidebar__item-icon">📊</span>
+          <span class="app-sidebar__item-text">Dashboard</span>
+        </a>
+
+        <!-- Transactions Group -->
+        <div class="app-sidebar__group-title">Transactions</div>
+        <a class="app-sidebar__item" data-route="sales">
+          <span class="app-sidebar__item-icon">📈</span>
+          <span class="app-sidebar__item-text">Sales</span>
+        </a>
+        <a class="app-sidebar__item" data-route="purchases">
+          <span class="app-sidebar__item-icon">🛒</span>
+          <span class="app-sidebar__item-text">Purchases</span>
+        </a>
+        <a class="app-sidebar__item" data-route="payments">
+          <span class="app-sidebar__item-icon">💳</span>
+          <span class="app-sidebar__item-text">Payments</span>
+        </a>
+        <a class="app-sidebar__item" data-route="journal-entries">
+          <span class="app-sidebar__item-icon">📝</span>
+          <span class="app-sidebar__item-text">Journal Entries</span>
+        </a>
+
+        <!-- Master Data Group -->
+        <div class="app-sidebar__group-title">Master Data</div>
+        <a class="app-sidebar__item" data-route="contacts">
+          <span class="app-sidebar__item-icon">👥</span>
+          <span class="app-sidebar__item-text">Contacts</span>
+        </a>
+        <a class="app-sidebar__item" data-route="products">
+          <span class="app-sidebar__item-icon">📦</span>
+          <span class="app-sidebar__item-text">Products</span>
+        </a>
+        <a class="app-sidebar__item" data-route="chart-of-accounts">
+          <span class="app-sidebar__item-icon">🏛️</span>
+          <span class="app-sidebar__item-text">Chart of Accounts</span>
+        </a>
+        <a class="app-sidebar__item" data-route="journals">
+          <span class="app-sidebar__item-icon">📖</span>
+          <span class="app-sidebar__item-text">Journals</span>
+        </a>
+
+        <!-- Management & Analytics -->
+        <div class="app-sidebar__group-title">Management</div>
+        <a class="app-sidebar__item" data-route="analytic-accounts">
+          <span class="app-sidebar__item-icon">🏷️</span>
+          <span class="app-sidebar__item-text">Analytic Accounts</span>
+        </a>
+        <a class="app-sidebar__item" data-route="budgets">
+          <span class="app-sidebar__item-icon">🎯</span>
+          <span class="app-sidebar__item-text">Budgets</span>
+        </a>
+        <a class="app-sidebar__item" data-route="reports">
+          <span class="app-sidebar__item-icon">📑</span>
+          <span class="app-sidebar__item-text">Reports</span>
+        </a>
+
+      </nav>
+
+      <!-- Sidebar Footer User Profile -->
+      <div class="app-sidebar__footer">
+        <div class="app-sidebar__user-avatar">FA</div>
+        <div class="app-sidebar__user-info">
+          <div class="app-sidebar__user-name">Financial Admin</div>
+          <div class="app-sidebar__user-role">Lead Accountant</div>
+        </div>
+      </div>
+
+    </aside>
+
+    <!-- Main Content Layout Frame -->
+    <div class="app-main">
+      
+      <!-- Top Header Bar -->
+      <header class="app-header">
+        
+        <div class="app-header__left">
+          <button class="app-mobile-menu-btn" id="mobile-menu-toggle" aria-label="Open Navigation">
+            ☰
+          </button>
+
+          <!-- Breadcrumb Trail -->
+          <ul class="app-breadcrumb" id="app-breadcrumb">
+            <li class="app-breadcrumb__item"><a href="#dashboard">Home</a></li>
+            <li class="app-breadcrumb__separator">/</li>
+            <li class="app-breadcrumb__item active">Dashboard</li>
+          </ul>
+        </div>
+
+        <div class="app-header__right">
+          <!-- Global Search Box -->
+          <div class="app-search-box app-header__search-container" style="width: 240px;">
+            <span class="app-search-box__icon">🔍</span>
+            <input type="text" class="app-input" placeholder="Search accounts, invoices...">
+          </div>
+
+          <!-- Notification Icon Button -->
+          <button class="app-btn app-btn--icon" onclick="App.UI.Toast.show({ message: 'No unread accounting alerts.', type: 'info' })" aria-label="Notifications">
+            🔔
+          </button>
+        </div>
+
+      </header>
+
+      <!-- Dynamic Page Container (Router Mount Target) -->
+      <main class="app-page-container" id="page-container">
+        <!-- Dynamic Module HTML Rendered Here -->
+      </main>
+
+    </div>
+
+  </div>
+
+  <!-- JavaScript Foundation Scripts -->
+  <script src="js/mock-data.js"></script>
+  <script src="js/ui-components.js"></script>
+  <script src="js/navigation.js"></script>
+  <script src="modules/dashboard/dashboard.js"></script>
+  <script src="js/app.js"></script>
+
+</body>
+</html>
