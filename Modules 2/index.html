@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Urban Furniture — Accounting System</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Header -->
+  <header class="app-header">
+    <div class="brand">
+      <div class="brand-icon">UF</div>
+      <span class="brand-name">Urban Furniture</span>
+      <span class="brand-tag">Accounting System</span>
+    </div>
+    <div class="header-status">
+      <span><span class="indicator"></span>Double-Entry Engine: <strong>Active</strong></span>
+      <span style="opacity: 0.6">|</span>
+      <span>Storage: <strong>LocalStorage</strong></span>
+      <button class="btn btn-secondary btn-sm" id="btn-reset-demo" style="color: #fff; background: rgba(255,255,255,0.15); border: none;">Reset Demo Data</button>
+    </div>
+  </header>
+
+  <!-- Navigation Bar -->
+  <nav class="nav-bar">
+    <button class="nav-tab active" data-tab="dashboard">Dashboard</button>
+    <button class="nav-tab" data-tab="purchases">Purchases (PO & Bills)</button>
+    <button class="nav-tab" data-tab="sales">Sales (SO & Invoices)</button>
+    <button class="nav-tab" data-tab="payments">Payments & Receipts</button>
+    <button class="nav-tab" data-tab="journal">Journal Entries</button>
+    <button class="nav-tab" data-tab="reports">Financial Reports</button>
+    <button class="nav-tab" data-tab="masters">Master Data</button>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="main-content">
+
+    <!-- TAB 1: DASHBOARD -->
+    <section id="view-dashboard" class="view-panel active">
+      <div class="panel-header">
+        <div>
+          <h1 class="panel-title">Accounting Overview</h1>
+          <p class="panel-subtitle">Real-time financial status, balances, and operational KPIs</p>
+        </div>
+        <div class="action-bar">
+          <button class="btn btn-primary" onclick="App.openNewPOMap()">+ New Purchase Order</button>
+          <button class="btn btn-success" onclick="App.openNewSOMap()">+ New Sales Order</button>
+        </div>
+      </div>
+
+      <!-- KPI Cards Grid -->
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-label">Accounts Receivable (Debtors)</div>
+          <div class="kpi-value" id="kpi-receivables">₹0.00</div>
+          <div class="kpi-hint">Pending customer collections</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Accounts Payable (Creditors)</div>
+          <div class="kpi-value" id="kpi-payables">₹0.00</div>
+          <div class="kpi-hint">Outstanding vendor dues</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Cash in Hand</div>
+          <div class="kpi-value" id="kpi-cash">₹0.00</div>
+          <div class="kpi-hint">Liquid physical drawer balance</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Bank Account (HDFC)</div>
+          <div class="kpi-value" id="kpi-bank">₹0.00</div>
+          <div class="kpi-hint">Primary operational bank ledger</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-label">Net Profit / Loss</div>
+          <div class="kpi-value" id="kpi-profit">₹0.00</div>
+          <div class="kpi-hint">Sales Income minus Purchases/Expenses</div>
+        </div>
+      </div>
+
+      <!-- Live Stock & Recent Activities -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); gap: 1.5rem;">
+        <div>
+          <h2 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 0.75rem;">Inventory Stock Snapshot</h2>
+          <div class="table-container">
+            <table class="data-table" id="dashboard-stock-table">
+              <thead>
+                <tr>
+                  <th>Product</th>
+                  <th>Category</th>
+                  <th>Cost Price</th>
+                  <th>Sales Price</th>
+                  <th class="text-right">Available Stock</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div>
+          <h2 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 0.75rem;">Recent Journal Postings</h2>
+          <div class="table-container">
+            <table class="data-table" id="dashboard-journal-table">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Entry #</th>
+                  <th>Reference</th>
+                  <th class="text-right">Total Debit</th>
+                  <th class="text-right">Total Credit</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 2: PURCHASES -->
+    <section id="view-purchases" class="view-panel">
+      <div class="panel-header">
+        <div>
+          <h1 class="panel-title">Purchases Workflow</h1>
+          <p class="panel-subtitle">Vendor Selection → Purchase Order → Goods Receipt / Vendor Bill → Payment</p>
+        </div>
+        <button class="btn btn-primary" onclick="App.openNewPOMap()">+ Create Purchase Order</button>
+      </div>
+
+      <div class="sub-tabs">
+        <button class="sub-tab active" onclick="App.switchPurchasesSubTab('orders')">Purchase Orders</button>
+        <button class="sub-tab" onclick="App.switchPurchasesSubTab('bills')">Vendor Bills</button>
+      </div>
+
+      <div id="purchases-subtab-orders" class="table-container">
+        <table class="data-table" id="purchases-orders-table">
+          <thead>
+            <tr>
+              <th>PO #</th>
+              <th>Date</th>
+              <th>Vendor</th>
+              <th>Items</th>
+              <th class="text-right">Total Amount</th>
+              <th>Status</th>
+              <th class="text-center">Actions</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <div id="purchases-subtab-bills" class="table-container" style="display: none;">
+        <table class="data-table" id="purchases-bills-table">
+          <thead>
+            <tr>
+              <th>Bill #</th>
+              <th>PO Ref</th>
+              <th>Bill Date</th>
+              <th>Due Date</th>
+              <th>Vendor</th>
+              <th class="text-right">Total</th>
+              <th class="text-right">Balance Due</th>
+              <th>Status</th>
+              <th class="text-center">Actions</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- TAB 3: SALES -->
+    <section id="view-sales" class="view-panel">
+      <div class="panel-header">
+        <div>
+          <h1 class="panel-title">Sales Workflow</h1>
+          <p class="panel-subtitle">Customer Selection → Sales Order (with Tax) → Stock Decrement → Customer Invoice → Payment</p>
+        </div>
+        <button class="btn btn-success" onclick="App.openNewSOMap()">+ Create Sales Order</button>
+      </div>
+
+      <div class="sub-tabs">
+        <button class="sub-tab active" onclick="App.switchSalesSubTab('orders')">Sales Orders</button>
+        <button class="sub-tab" onclick="App.switchSalesSubTab('invoices')">Customer Invoices</button>
+      </div>
+
+      <div id="sales-subtab-orders" class="table-container">
+        <table class="data-table" id="sales-orders-table">
+          <thead>
+            <tr>
+              <th>SO #</th>
+              <th>Date</th>
+              <th>Customer</th>
+              <th>Items</th>
+              <th class="text-right">Subtotal</th>
+              <th class="text-right">Tax (GST)</th>
+              <th class="text-right">Grand Total</th>
+              <th>Status</th>
+              <th class="text-center">Actions</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <div id="sales-subtab-invoices" class="table-container" style="display: none;">
+        <table class="data-table" id="sales-invoices-table">
+          <thead>
+            <tr>
+              <th>Invoice #</th>
+              <th>SO Ref</th>
+              <th>Date</th>
+              <th>Due Date</th>
+              <th>Customer</th>
+              <th class="text-right">Grand Total</th>
+              <th class="text-right">Balance Due</th>
+              <th>Status</th>
+              <th class="text-center">Actions</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- TAB 4: PAYMENTS -->
+    <section id="view-payments" class="view-panel">
+      <div class="panel-header">
+        <div>
+          <h1 class="panel-title">Payments & Receipts</h1>
+          <p class="panel-subtitle">Traceable Cash/Bank settlements linked directly to bills and invoices</p>
+        </div>
+      </div>
+
+      <div class="table-container">
+        <table class="data-table" id="payments-table">
+          <thead>
+            <tr>
+              <th>Payment #</th>
+              <th>Date</th>
+              <th>Direction</th>
+              <th>Partner</th>
+              <th>Method</th>
+              <th>Linked Document</th>
+              <th>Reference</th>
+              <th class="text-right">Amount</th>
+              <th>Journal Entry</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- TAB 5: JOURNAL ENTRIES -->
+    <section id="view-journal" class="view-panel">
+      <div class="panel-header">
+        <div>
+          <h1 class="panel-title">General Journal & Double-Entry Ledger</h1>
+          <p class="panel-subtitle">Every entry strictly satisfies Σ Debits = Σ Credits. Auto-posted from transactions or manual entries.</p>
+        </div>
+      </div>
+
+      <div class="table-container">
+        <table class="data-table" id="journal-entries-table">
+          <thead>
+            <tr>
+              <th>Entry #</th>
+              <th>Date</th>
+              <th>Journal</th>
+              <th>Reference / Source</th>
+              <th>Account Details</th>
+              <th class="text-right">Debit (₹)</th>
+              <th class="text-right">Credit (₹)</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- TAB 6: FINANCIAL REPORTS -->
+    <section id="view-reports" class="view-panel">
+      <div class="panel-header">
+        <div>
+          <h1 class="panel-title">Financial Reports</h1>
+          <p class="panel-subtitle">Real-time calculations derived dynamically from general ledger transactions</p>
+        </div>
+        <div class="action-bar">
+          <button class="btn btn-secondary btn-sm" onclick="window.print()">Print / Export PDF</button>
+        </div>
+      </div>
+
+      <div class="sub-tabs">
+        <button class="sub-tab active" onclick="App.switchReportSubTab('pl')">Profit & Loss</button>
+        <button class="sub-tab" onclick="App.switchReportSubTab('bs')">Balance Sheet</button>
+        <button class="sub-tab" onclick="App.switchReportSubTab('budget')">Budget Report</button>
+      </div>
+
+      <!-- P&L Report -->
+      <div id="reports-subtab-pl" class="table-container" style="padding: 1.5rem;">
+        <h3 style="margin-bottom: 1rem; color: var(--wood-dark);">Profit & Loss Statement (Fiscal Year 2026)</h3>
+        <table class="data-table" style="max-width: 750px;">
+          <thead>
+            <tr>
+              <th>Account Description</th>
+              <th class="text-right">Amount (₹)</th>
+            </tr>
+          </thead>
+          <tbody id="pl-table-body"></tbody>
+        </table>
+      </div>
+
+      <!-- Balance Sheet Report -->
+      <div id="reports-subtab-bs" class="table-container" style="display: none; padding: 1.5rem;">
+        <h3 style="margin-bottom: 1rem; color: var(--wood-dark);">Balance Sheet Snapshot (Assets = Liabilities + Capital)</h3>
+        <table class="data-table" style="max-width: 850px;">
+          <thead>
+            <tr>
+              <th>Classification & Accounts</th>
+              <th class="text-right">Subtotal (₹)</th>
+              <th class="text-right">Total (₹)</th>
+            </tr>
+          </thead>
+          <tbody id="bs-table-body"></tbody>
+        </table>
+      </div>
+
+      <!-- Budget Report -->
+      <div id="reports-subtab-budget" class="table-container" style="display: none; padding: 1.5rem;">
+        <h3 style="margin-bottom: 1rem; color: var(--wood-dark);">Budget Variance & Consumption Report</h3>
+        <table class="data-table" id="budget-report-table">
+          <thead>
+            <tr>
+              <th>Budget Name</th>
+              <th>Analytic Scope</th>
+              <th>Responsible</th>
+              <th class="text-right">Planned (₹)</th>
+              <th class="text-right">Actual Spent (₹)</th>
+              <th class="text-right">Remaining (₹)</th>
+              <th>Usage %</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- TAB 7: MASTER DATA -->
+    <section id="view-masters" class="view-panel">
+      <div class="panel-header">
+        <div>
+          <h1 class="panel-title">Master Data Management Center</h1>
+          <p class="panel-subtitle">Contacts, Products, Chart of Accounts, Journals, Analytic Accounts & Budgets</p>
+        </div>
+        <div class="action-bar" id="master-action-bar">
+          <button class="btn btn-primary btn-sm" onclick="App.openMasterAddModal()">+ Add New Record</button>
+        </div>
+      </div>
+
+      <div class="sub-tabs">
+        <button class="sub-tab active" onclick="App.switchMasterSubTab('contacts')">Contacts</button>
+        <button class="sub-tab" onclick="App.switchMasterSubTab('products')">Products</button>
+        <button class="sub-tab" onclick="App.switchMasterSubTab('accounts')">Chart of Accounts</button>
+        <button class="sub-tab" onclick="App.switchMasterSubTab('journals')">Journals</button>
+        <button class="sub-tab" onclick="App.switchMasterSubTab('analytic')">Analytic Accounts</button>
+        <button class="sub-tab" onclick="App.switchMasterSubTab('budgets')">Budgets</button>
+      </div>
+
+      <!-- Contacts Subtab -->
+      <div id="masters-subtab-contacts" class="table-container" style="padding: 1rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+          <input type="text" class="form-control" id="master-contacts-search" placeholder="Search contacts..." style="max-width: 300px;" oninput="App.renderMasters()" />
+          <button class="btn btn-primary btn-sm" onclick="App.openContactModal()">+ Add Contact</button>
+        </div>
+        <table class="data-table" id="master-contacts-table">
+          <thead>
+            <tr>
+              <th>Contact Name</th>
+              <th>Type</th>
+              <th>Email</th>
+              <th>Mobile</th>
+              <th>City & State</th>
+              <th>Status</th>
+              <th class="text-center">Actions</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <!-- Products Subtab -->
+      <div id="masters-subtab-products" class="table-container" style="display: none; padding: 1rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+          <input type="text" class="form-control" id="master-products-search" placeholder="Search products..." style="max-width: 300px;" oninput="App.renderMasters()" />
+          <button class="btn btn-primary btn-sm" onclick="App.openProductModal()">+ Add Product</button>
+        </div>
+        <table class="data-table" id="master-products-table">
+          <thead>
+            <tr>
+              <th>Product Name</th>
+              <th>Type</th>
+              <th>Category</th>
+              <th class="text-right">Sales Price</th>
+              <th class="text-right">Cost Price</th>
+              <th class="text-right">Stock Level</th>
+              <th>Status</th>
+              <th class="text-center">Actions</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <!-- Chart of Accounts Subtab -->
+      <div id="masters-subtab-accounts" class="table-container" style="display: none; padding: 1rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+          <input type="text" class="form-control" id="master-accounts-search" placeholder="Search accounts..." style="max-width: 300px;" oninput="App.renderMasters()" />
+          <button class="btn btn-primary btn-sm" onclick="App.openAccountModal()">+ Add Account</button>
+        </div>
+        <table class="data-table" id="master-accounts-table">
+          <thead>
+            <tr>
+              <th>Code</th>
+              <th>Account Name</th>
+              <th>Type</th>
+              <th class="text-right">Current Balance</th>
+              <th>Status</th>
+              <th class="text-center">Actions</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <!-- Journals Subtab -->
+      <div id="masters-subtab-journals" class="table-container" style="display: none; padding: 1rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+          <input type="text" class="form-control" id="master-journals-search" placeholder="Search journals..." style="max-width: 300px;" oninput="App.renderMasters()" />
+          <button class="btn btn-primary btn-sm" onclick="App.openJournalModal()">+ Add Journal</button>
+        </div>
+        <table class="data-table" id="master-journals-table">
+          <thead>
+            <tr>
+              <th>Code</th>
+              <th>Journal Name</th>
+              <th>Type</th>
+              <th>Default Account</th>
+              <th>Status</th>
+              <th class="text-center">Actions</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <!-- Analytic Accounts Subtab -->
+      <div id="masters-subtab-analytic" class="table-container" style="display: none; padding: 1rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+          <input type="text" class="form-control" id="master-analytic-search" placeholder="Search analytic accounts..." style="max-width: 300px;" oninput="App.renderMasters()" />
+          <button class="btn btn-primary btn-sm" onclick="App.openAnalyticModal()">+ Add Analytic Account</button>
+        </div>
+        <table class="data-table" id="master-analytic-table">
+          <thead>
+            <tr>
+              <th>Code</th>
+              <th>Analytic Account Name</th>
+              <th>Type</th>
+              <th>Status</th>
+              <th class="text-center">Actions</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <!-- Budgets Subtab -->
+      <div id="masters-subtab-budgets" class="table-container" style="display: none; padding: 1rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+          <input type="text" class="form-control" id="master-budgets-search" placeholder="Search budgets..." style="max-width: 300px;" oninput="App.renderMasters()" />
+          <button class="btn btn-primary btn-sm" onclick="App.openBudgetModal()">+ Add Budget</button>
+        </div>
+        <table class="data-table" id="master-budgets-table">
+          <thead>
+            <tr>
+              <th>Budget Title</th>
+              <th>Analytic Scope</th>
+              <th>Period</th>
+              <th>Responsible</th>
+              <th class="text-right">Planned Amount</th>
+              <th class="text-center">Actions</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Load Scripts in strict dependency order -->
+  <script src="js/store.js"></script>
+  <script src="js/member2-masters.js"></script>
+  <script src="js/member1-ui.js"></script>
+  <script src="modules/journal-entries/journal-engine.js"></script>
+  <script src="modules/purchases/purchases.js"></script>
+  <script src="modules/sales/sales.js"></script>
+  <script src="modules/payments/payments.js"></script>
+  <script src="modules/reports/reports.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
